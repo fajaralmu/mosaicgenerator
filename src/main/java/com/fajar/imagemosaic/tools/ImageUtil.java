@@ -14,19 +14,20 @@ import com.fajar.imagemosaic.models.RgbColor;
 
 public class ImageUtil {
 	
-	static Map<Double, BufferedImage> randomImages = new HashMap<Double, BufferedImage>();
+	static Map<RgbColor, BufferedImage> randomImages = new HashMap<RgbColor, BufferedImage>();
 	static final String namedRandImagesPath = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random_named\\";
 	public static void main(String[] args) {
-		setRandomImageMap();
+//		setRandomImageMap();
+		renameRandomImagesToAvgRgbComponents();
 	}
-	public static BufferedImage getNearestImage(double avgRgb) {
-		System.out.println("avgRgb: "+avgRgb);
-		double gap = 255;
-		Double selectedKey = null;
-		for (Double key : randomImages.keySet()) {
+	public static BufferedImage getNearestImage(RgbColor rgb) {
+		System.out.println("avgRgb: "+rgb);
+		double gap = 255*3;
+		RgbColor selectedKey = null;
+		for (RgbColor key : randomImages.keySet()) {
 			
-			if (Math.abs(avgRgb - key) < gap) {
-				gap = Math.abs(avgRgb - key);
+			if (key.gap(rgb) < gap) {
+				gap = key.gap(rgb);
 				selectedKey = key;
 			}
 		} 
@@ -46,8 +47,9 @@ public class ImageUtil {
 				if (image == null  ) {
 					continue;
 				}
-				String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-				randomImages.put(Double.valueOf(name), image);
+				String name = file.getName().replace("E-", "00").substring(0, file.getName().lastIndexOf("."));
+				 
+				randomImages.put(RgbColor.create(name), image);
 				 
 			} catch (IOException e) {
 				System.out.println("Error reading "+file.getName());
@@ -63,10 +65,11 @@ public class ImageUtil {
 		List<BufferedImage> images = getImagesFromDirectory(directoryPath );
 		for (BufferedImage image : images) {
 			List<RgbColor> rgbs = getRgbColors(image);
-			double avg = RgbColor.average(rgbs);  
+			RgbColor avg = RgbColor.average(rgbs);  
 			 
 			try {
-				ImageIO.write(image, "png", new File(outputDirectoryPath+avg+".png"));
+				String name = avg.getRed()+"-"+avg.getGreen()+"-"+avg.getBlue();
+				ImageIO.write(image, "png", new File(outputDirectoryPath+name+".png"));
 				System.out.println("done: "+avg);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -105,7 +108,7 @@ public class ImageUtil {
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				colors.add(RgbColor.create(image,x,y));
+				colors.add(RgbColor.create(image,y,x));
 			}
 		}
 		return colors;

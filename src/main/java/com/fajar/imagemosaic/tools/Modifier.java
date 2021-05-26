@@ -28,7 +28,7 @@ public class Modifier {
 		File directory = new File(dir);
 		File[] files = directory.listFiles();
 
-		List<BufferedImage> images = ImageUtil.getImagesFromDirectory(dir);
+		 
 		for (File file : files) {
 
 			if (file.isDirectory()) {
@@ -39,11 +39,17 @@ public class Modifier {
 				if (image == null || image.getWidth() < 70 || image.getHeight() < 70) {
 					continue;
 				}
-				System.out.println(file.getName() + " size: " + image.getWidth() + " x " + image.getHeight());
-				images.add(image);
-				resize(file.getCanonicalPath(), outputDir + file.getName(), 100, 100);
-			} catch (IOException e) {
-				System.out.println("Error reading " + file.getName());
+				System.out.println(file.getName() + " size: " + image.getWidth() + " x " + image.getHeight()); 
+				BufferedImage newImage = scale(file.getCanonicalPath(), 100, 100);
+				BufferedImage outputImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+				
+				Graphics2D g = outputImage.createGraphics();
+				g.drawImage(newImage, 0, 0, null);
+				g.dispose();
+				String formatName = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+				ImageIO.write(outputImage, formatName, new File(outputDir + file.getName()));
+			} catch ( Exception e) {
+				System.out.println("Error generating " + file.getName());
 				continue;
 			}
 		}

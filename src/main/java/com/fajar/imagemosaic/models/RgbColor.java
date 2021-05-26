@@ -1,5 +1,6 @@
 package com.fajar.imagemosaic.models;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -30,5 +31,12 @@ public class RgbColor {
 		}
 		
 		return sum/rgbColors.size();
+	}
+	public static RgbColor create(BufferedImage image, int x, int y) {
+		int pixel = image.getRGB(x, y);
+		int red = (pixel >> 16) & 0xff;
+		int green = (pixel >> 8) & 0xff;
+		int blue = (pixel) & 0xff;
+		return RgbColor.builder().red(red).green(green).blue(blue).build();
 	}
 }

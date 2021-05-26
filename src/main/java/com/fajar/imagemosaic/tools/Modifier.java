@@ -37,7 +37,7 @@ public class Modifier {
 			}
 			try {
 				BufferedImage image = ImageIO.read(file);
-				if (image == null || image.getWidth() < 70 || image.getHeight() < 70) {
+				if (image == null || image.getWidth() < 25 || image.getHeight() < 25) {
 					continue;
 				}
 				System.out.println(file.getName() + " size: " + image.getWidth() + " x " + image.getHeight()); 

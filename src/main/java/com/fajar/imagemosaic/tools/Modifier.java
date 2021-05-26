@@ -1,5 +1,6 @@
 package com.fajar.imagemosaic.tools;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -44,6 +45,8 @@ public class Modifier {
 				BufferedImage outputImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 				
 				Graphics2D g = outputImage.createGraphics();
+				g.setColor(Color.white);
+				g.fillRect(0, 0, 100, 100);
 				g.drawImage(newImage, 0, 0, null);
 				g.dispose();
 				String formatName = file.getName().substring(file.getName().lastIndexOf(".") + 1);

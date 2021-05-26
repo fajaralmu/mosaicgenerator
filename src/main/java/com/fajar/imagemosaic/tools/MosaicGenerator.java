@@ -40,8 +40,10 @@ public class MosaicGenerator {
 				RgbColor rgb = rgbs.get(index);
 				BufferedImage img = ImageUtil.getNearestImage(rgb);
 				g.drawImage(img,width*SIZE, height*SIZE, SIZE, SIZE, null); 
+				
 				g2.setColor(new Color(rgb.getRed().intValue(),rgb.getGreen().intValue(), rgb.getBlue().intValue(),255 ));
 				g2.fillRect(width*SIZE, height*SIZE, SIZE, SIZE);
+				
 				System.out.println("progres: "+(index+1)+"/"+rgbs.size());
 			}
 		}

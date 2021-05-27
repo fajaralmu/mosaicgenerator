@@ -13,15 +13,8 @@ public class Modifier {
 //		testResizeOneImage();
 		getRandomImages();
 	}
-
-	private static void testResizeOneImage() {
-		// TODO Auto-generated method stub
-		String input = "D:\\Development\\Fajar\\imagemosaic\\images\\input\\sample.jpg";
-		String output = "D:\\Development\\Fajar\\imagemosaic\\images\\output\\sample.jpg";
-		resize(input, output, 50, 50);
-	}
 	
-	public static BufferedImage scale(BufferedImage input, Integer minSize) {
+	public static BufferedImage scale(BufferedImage input, Integer minSize) throws IOException {
 		double w = input.getWidth();
 		double h = input.getHeight();
 		Double outputW = w, outputH = h;
@@ -43,14 +36,7 @@ public class Modifier {
 			outputW = minSize.doubleValue();
 			outputH = h * scaleFactor;
 		}
-		
-		System.out.println("Scale to : "+outputW.intValue()+" x "+outputH.intValue());
-		
-		BufferedImage outputImage = new BufferedImage(outputW.intValue(), outputH.intValue(), input.getType());
-		Graphics2D g = outputImage.createGraphics(); 
-		g.drawImage(input, 0, 0, outputW.intValue(), outputH.intValue(), null);
-		g.dispose();
-		return outputImage;
+		return scale(input, outputW.intValue(), outputH.intValue());
 	}
 
 	/**
@@ -76,7 +62,7 @@ public class Modifier {
 					continue;
 				}
 				System.out.println(file.getName() + " size: " + image.getWidth() + " x " + image.getHeight()); 
-				BufferedImage newImage = scale(file.getCanonicalPath(), outputSize, outputSize);
+				BufferedImage newImage = scale(image, outputSize, outputSize);
 				BufferedImage outputImage = new BufferedImage(outputSize, outputSize, BufferedImage.TYPE_INT_RGB);
 				
 				Graphics2D g = outputImage.createGraphics();
@@ -95,12 +81,8 @@ public class Modifier {
 	}
 
 	// https://www.codejava.net/java-se/graphics/how-to-resize-images-in-java
-	public static BufferedImage scale(String inputImagePath, int scaledWidth, int scaledHeight) throws IOException {
-
-		// reads input image
-		File inputFile = new File(inputImagePath);
-
-		BufferedImage inputImage = ImageIO.read(inputFile);
+	public static BufferedImage scale(BufferedImage inputImage, int scaledWidth, int scaledHeight) throws IOException {
+ 
 		System.out.println("actual size: " + inputImage.getWidth() + " x " + inputImage.getHeight());
 		System.out.println("resize to: " + scaledWidth + " x " + scaledHeight);
 		// creates output image
@@ -113,24 +95,5 @@ public class Modifier {
 		return outputImage;
 	}
 
-	// https://www.codejava.net/java-se/graphics/how-to-resize-images-in-java
-	public static boolean resize(String inputImagePath, String outputImagePath, int scaledWidth, int scaledHeight) {
-
-		try { ;
-			// creates output image
-			BufferedImage outputImage = scale(inputImagePath, scaledWidth, scaledHeight); 
-
-			// extracts extension of output file
-			String formatName = outputImagePath.substring(outputImagePath.lastIndexOf(".") + 1);
-
-			// writes to output file
-			File outputFile = new File(outputImagePath);
-			boolean write = ImageIO.write(outputImage, formatName, outputFile);
-			return write;
-		} catch (Exception ex) {
-
-			return false;
-		}
-
-	}
+	 
 }

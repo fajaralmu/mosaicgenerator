@@ -1,13 +1,23 @@
 package com.fajar.imagemosaic;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import com.fajar.imagemosaic.config.ConfigLoader;
+import com.fajar.imagemosaic.tools.MosaicGenerator;
+
 /**
  * Hello world!
  *
  */
 public class App 
 {
-    public static void main( String[] args )
+	static final String INPUT_PATH = ConfigLoader.instance().getInputPath();
+    public static void main( String[] args ) throws IOException
     {
-        System.out.println( "Hello World!" );
+        MosaicGenerator.generate(ImageIO.read(new File(INPUT_PATH+"sample.jpg")));
+        
     }
 }

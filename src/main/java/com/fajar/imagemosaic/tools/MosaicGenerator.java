@@ -15,13 +15,12 @@ import com.fajar.imagemosaic.models.RgbColor;
 public class MosaicGenerator {
 
 	static final String RANDOM_IMAGE_PATH =  ConfigLoader.instance().getRandomImagePath();
-	static final String INPUT_PATH = ConfigLoader.instance().getInputPath();
-	static final String OUTPUT_PATH  = ConfigLoader.instance().getOutputPath();
-	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize();
 	
-	public static void main(String[] args) throws IOException {
+	static final String OUTPUT_PATH  = ConfigLoader.instance().getOutputPath();
+	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize(); 
+	public static void generate(BufferedImage image) throws IOException {
 		ImageUtil.setRandomImageMap();
-		BufferedImage scaledImage = Modifier.scale(ImageIO.read(new File(INPUT_PATH+"sample.jpg")), SIZE);
+		BufferedImage scaledImage = Modifier.scale(image, SIZE);
 		 
 		List<RgbColor> rgbs = ImageUtil.getRgbColors(scaledImage);
 		BufferedImage outputImage = new BufferedImage(scaledImage.getWidth()*SIZE, scaledImage.getHeight()*SIZE, BufferedImage.TYPE_INT_RGB);

@@ -27,6 +27,9 @@ public class ConfigLoader {
 	public int getInputScaleSize() {
 		return loadInt("image.input.scaleSize");
 	}
+	public String getRandomRawImagePath() {
+		return properties.getProperty("image.random.rawPath");
+	}
 	public String getRandomImagePath() {
 		return properties.getProperty("image.random.path");
 	}

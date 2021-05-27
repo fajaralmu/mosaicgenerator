@@ -5,8 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +20,42 @@ public class Modifier {
 		String output = "D:\\Development\\Fajar\\imagemosaic\\images\\output\\sample.jpg";
 		resize(input, output, 50, 50);
 	}
+	
+	public static BufferedImage scale(BufferedImage input, Integer minSize) {
+		double w = input.getWidth();
+		double h = input.getHeight();
+		Double outputW = w, outputH = h;
+		double scaleFactor = 1.0d;
+		if (w > h) {
+			if (h < minSize) {
+				scaleFactor = h / minSize; 
+			} else {
+				scaleFactor = minSize/h;
+			}
+			outputH = minSize.doubleValue();
+			outputW = w * scaleFactor;
+		} else {
+			if (w < minSize) {
+				scaleFactor = w / minSize; 
+			} else {
+				scaleFactor =minSize/w; 
+			}
+			outputW = minSize.doubleValue();
+			outputH = h * scaleFactor;
+		}
+		
+		System.out.println("Scale to : "+outputW.intValue()+" x "+outputH.intValue());
+		
+		BufferedImage outputImage = new BufferedImage(outputW.intValue(), outputH.intValue(), input.getType());
+		Graphics2D g = outputImage.createGraphics(); 
+		g.drawImage(input, 0, 0, outputW.intValue(), outputH.intValue(), null);
+		g.dispose();
+		return outputImage;
+	}
 
+	/**
+	 * move random image to specified path if dimension >= 25 x 25
+	 */
 	private static void getRandomImages() {
 		String dir = "D:\\Archieve\\Pictures\\RandomImages";
 		String outputDir = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random\\";
@@ -36,17 +69,19 @@ public class Modifier {
 				continue;
 			}
 			try {
+				int minSize = 25;
+				int outputSize = 100;
 				BufferedImage image = ImageIO.read(file);
-				if (image == null || image.getWidth() < 25 || image.getHeight() < 25) {
+				if (image == null || image.getWidth() < minSize || image.getHeight() < minSize) {
 					continue;
 				}
 				System.out.println(file.getName() + " size: " + image.getWidth() + " x " + image.getHeight()); 
-				BufferedImage newImage = scale(file.getCanonicalPath(), 100, 100);
-				BufferedImage outputImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+				BufferedImage newImage = scale(file.getCanonicalPath(), outputSize, outputSize);
+				BufferedImage outputImage = new BufferedImage(outputSize, outputSize, BufferedImage.TYPE_INT_RGB);
 				
 				Graphics2D g = outputImage.createGraphics();
 				g.setColor(Color.white);
-				g.fillRect(0, 0, 100, 100);
+				g.fillRect(0, 0, outputSize, outputSize);
 				g.drawImage(newImage, 0, 0, null);
 				g.dispose();
 				String formatName = file.getName().substring(file.getName().lastIndexOf(".") + 1);

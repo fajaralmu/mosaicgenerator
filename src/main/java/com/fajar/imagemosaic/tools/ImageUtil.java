@@ -18,7 +18,7 @@ public class ImageUtil {
 	static final String namedRandImagesPath = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random_named\\";
 	public static void main(String[] args) {
 //		setRandomImageMap();
-		renameRandomImagesToAvgRgbComponents();
+		renameRandomImagesToRgbComponents();
 	}
 	public static BufferedImage getNearestImage(RgbColor rgb) {
 		System.out.println("avgRgb: "+rgb);
@@ -59,7 +59,7 @@ public class ImageUtil {
 		}
 	}
 	
-	public static void renameRandomImagesToAvgRgbComponents() {
+	public static void renameRandomImagesToRgbComponents() {
 		String directoryPath = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random\\";
 		String outputDirectoryPath = namedRandImagesPath;
 		List<BufferedImage> images = getImagesFromDirectory(directoryPath );
@@ -105,10 +105,10 @@ public class ImageUtil {
 		List<RgbColor> colors = new ArrayList<RgbColor>();
 		int width = image.getWidth();
 		int height = image.getHeight();
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				colors.add(RgbColor.create(image,y,x));
+		 
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				colors.add(RgbColor.create(image,x,y));
 			}
 		}
 		return colors;

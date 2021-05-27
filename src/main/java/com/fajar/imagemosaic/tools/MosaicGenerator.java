@@ -20,10 +20,11 @@ public class MosaicGenerator {
 	static final Integer SIZE = 80;
 	public static void main(String[] args) throws IOException {
 		ImageUtil.setRandomImageMap();
-		BufferedImage scaledImage = Modifier.scale(inputPath, SIZE, SIZE);
+		BufferedImage scaledImage = Modifier.scale(ImageIO.read(new File(inputPath)), SIZE);
+		 
 		List<RgbColor> rgbs = ImageUtil.getRgbColors(scaledImage);
-		BufferedImage outputImage = new BufferedImage(SIZE*SIZE, SIZE*SIZE, BufferedImage.TYPE_INT_RGB);
-		BufferedImage outputImage2 = new BufferedImage(SIZE*SIZE, SIZE*SIZE, BufferedImage.TYPE_INT_RGB);
+		BufferedImage outputImage = new BufferedImage(scaledImage.getWidth()*SIZE, scaledImage.getHeight()*SIZE, BufferedImage.TYPE_INT_RGB);
+		BufferedImage outputImage2 = new BufferedImage(scaledImage.getWidth()*SIZE, scaledImage.getHeight()*SIZE, BufferedImage.TYPE_INT_RGB);
 
 		// scales the input image to the output image
 		Graphics2D g = outputImage.createGraphics();
@@ -35,8 +36,8 @@ public class MosaicGenerator {
 		g.fillRect(0, 0, outputImage.getWidth(), outputImage.getHeight());
 		   
 		int index = 0;
-		for (int width = 0; width < SIZE; width++) {
-			for (int height = 0; height < SIZE; height++, index++) {
+		for (int width = 0; width < scaledImage.getWidth(); width++) {
+			for (int height = 0; height < scaledImage.getHeight(); height++, index++) {
 				RgbColor rgb = rgbs.get(index);
 				BufferedImage img = ImageUtil.getNearestImage(rgb);
 				g.drawImage(img,width*SIZE, height*SIZE, SIZE, SIZE, null); 

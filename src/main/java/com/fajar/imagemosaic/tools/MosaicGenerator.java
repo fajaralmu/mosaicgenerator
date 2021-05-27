@@ -1,7 +1,6 @@
 package com.fajar.imagemosaic.tools;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,17 +9,19 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.fajar.imagemosaic.config.ConfigLoader;
 import com.fajar.imagemosaic.models.RgbColor;
 
 public class MosaicGenerator {
 
-	static final String outputDirectoryPath = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random_named\\";
-	static final String inputPath = "D:\\Development\\Fajar\\imagemosaic\\images\\input\\sample.jpg";
-	static final String OUTPUT_PATH  = "D:\\Development\\Fajar\\imagemosaic\\images\\output\\";
-	static final Integer SIZE = 80;
+	static final String RANDOM_IMAGE_PATH =  ConfigLoader.instance().getRandomImagePath();
+	static final String INPUT_PATH = ConfigLoader.instance().getInputPath();
+	static final String OUTPUT_PATH  = ConfigLoader.instance().getOutputPath();
+	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize();
+	
 	public static void main(String[] args) throws IOException {
 		ImageUtil.setRandomImageMap();
-		BufferedImage scaledImage = Modifier.scale(ImageIO.read(new File(inputPath)), SIZE);
+		BufferedImage scaledImage = Modifier.scale(ImageIO.read(new File(INPUT_PATH+"sample.jpg")), SIZE);
 		 
 		List<RgbColor> rgbs = ImageUtil.getRgbColors(scaledImage);
 		BufferedImage outputImage = new BufferedImage(scaledImage.getWidth()*SIZE, scaledImage.getHeight()*SIZE, BufferedImage.TYPE_INT_RGB);

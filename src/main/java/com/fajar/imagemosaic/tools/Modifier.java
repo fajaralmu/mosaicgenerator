@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.fajar.imagemosaic.config.ConfigLoader;
+
 public class Modifier {
 	public static void main(String[] args) {
 //		testResizeOneImage();
@@ -55,8 +57,8 @@ public class Modifier {
 				continue;
 			}
 			try {
-				int minSize = 25;
-				int outputSize = 100;
+				int minSize = ConfigLoader.instance().getRandomMinSize();
+				int outputSize = ConfigLoader.instance().getRandomAdjustedSize();
 				BufferedImage image = ImageIO.read(file);
 				if (image == null || image.getWidth() < minSize || image.getHeight() < minSize) {
 					continue;

@@ -10,15 +10,16 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import com.fajar.imagemosaic.config.ConfigLoader;
 import com.fajar.imagemosaic.models.RgbColor;
 
 public class ImageUtil {
 	
 	static Map<RgbColor, BufferedImage> randomImages = new HashMap<RgbColor, BufferedImage>();
-	static final String namedRandImagesPath = "D:\\Development\\Fajar\\imagemosaic\\images\\resources\\random_named\\";
+	static final String namedRandImagesPath = ConfigLoader.instance().getRandomImagePath();
 	public static void main(String[] args) {
 //		setRandomImageMap();
-		renameRandomImagesToRgbComponents();
+//		renameRandomImagesToRgbComponents();
 	}
 	public static BufferedImage getNearestImage(RgbColor rgb) {
 		System.out.println("avgRgb: "+rgb);

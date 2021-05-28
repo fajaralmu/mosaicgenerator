@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -13,12 +15,18 @@ import com.fajar.imagemosaic.models.WebResponse;
 import com.fajar.imagemosaic.tools.ImageUtil;
 import com.fajar.imagemosaic.tools.MosaicGenerator;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ImageProcessingService {
 
+	@Value("resources/random_named/")
+	private Resource randomImageDirectory;
 	@PostConstruct
 	public void init() throws IOException {
-		ImageUtil.setRandomImageMap();
+		ImageUtil.setRandomImageMap(randomImageDirectory);
+		log.info("randomImageDirectory: {}", randomImageDirectory);
 	}
 
 	public WebResponse generateMosaic(WebRequest request) throws IOException {

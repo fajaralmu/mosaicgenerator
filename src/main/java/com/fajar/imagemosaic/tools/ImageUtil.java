@@ -3,7 +3,6 @@ package com.fajar.imagemosaic.tools;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -87,8 +86,33 @@ public class ImageUtil {
 	    throw new UncheckedIOException(ioe);
 	  }
 	}
+	public static void setRandomImageMap(Resource directory) throws IOException  {
+		randomImages.clear();
+		File dir = directory.getFile();
+		for (File file : dir.listFiles()) {
+			
+			try {
+				 
+				BufferedImage image = ImageIO.read(file);
+				if (image == null) {
+					continue;
+				}
+				String name = file.getName().replace("E-", "00").substring(0, file.getName().lastIndexOf("."));
+
+				randomImages.put(RgbColor.create(name), image);
+
+			} catch (IOException e) {
+				System.out.println("Error reading " + file.getName());
+				continue;
+			}
+
+		}
+	}
 
 	public static void setRandomImageMap() throws IOException  {
+		if (randomImages.size() > 0) {
+			return;
+		}
 		randomImages.clear();
 
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

@@ -1,9 +1,14 @@
 package com.fajar.imagemosaic.tools;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +25,28 @@ public class ImageUtil {
 
 	static Map<RgbColor, BufferedImage> randomImages = new HashMap<RgbColor, BufferedImage>();
 	static final String namedRandImagesPath = ConfigLoader.instance().getRandomImagePath();
-
+ 
+	
 	public static void main(String[] args) {
 //		System.out.println(ImageUtil);
+	}
+	
+	public static BufferedImage readImageFromBase64String(String data) throws IOException {
+		String[] imageData = data.split(",");
+		if (imageData == null || imageData.length < 2) {
+			return null;
+		}
+		// create a buffered image
+		String imageString = imageData[1];
+		BufferedImage image = null;
+		byte[] imageByte;
+
+		Base64.Decoder decoder = Base64.getDecoder();
+		imageByte = decoder.decode(imageString);
+		ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+		image = ImageIO.read(bis);
+		bis.close();
+		return image;
 	}
 
 	public static BufferedImage getNearestImage(RgbColor rgb) {
@@ -38,8 +62,23 @@ public class ImageUtil {
 		}
 		return randomImages.get(selectedKey);
 	}
+	
+	public static String imgToBase64String(final BufferedImage img, final String formatName)
+	{
+	  final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-	static void setRandomImageMap() throws IOException  {
+	  try
+	  {
+	    ImageIO.write(img, formatName, os);
+	    return Base64.getEncoder().encodeToString(os.toByteArray());
+	  }
+	  catch (final IOException ioe)
+	  {
+	    throw new UncheckedIOException(ioe);
+	  }
+	}
+
+	public static void setRandomImageMap() throws IOException  {
 		randomImages.clear();
 
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

@@ -18,7 +18,7 @@ public class MosaicGenerator {
 	
 	static final String OUTPUT_PATH  = ConfigLoader.instance().getOutputPath();
 	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize(); 
-	public static void generate(BufferedImage image) throws IOException {
+	public static BufferedImage generate(BufferedImage image, boolean writeFile) throws IOException {
 		ImageUtil.setRandomImageMap();
 		BufferedImage scaledImage = Modifier.scale(image, SIZE);
 		 
@@ -50,9 +50,13 @@ public class MosaicGenerator {
 		}
 		g2.dispose();
 		g.dispose();
-		ImageIO.write(outputImage, "png", new File(OUTPUT_PATH+"output.png") );
-		ImageIO.write(outputImage2, "png", new File(OUTPUT_PATH+"output_original.png") );
+		if (writeFile) {
+			ImageIO.write(outputImage, "png", new File(OUTPUT_PATH+"output.png") );
+			ImageIO.write(outputImage2, "png", new File(OUTPUT_PATH+"output_original.png") );
+		}
 		System.out.println("DONE");
+		
+		return outputImage;
 	}
 	
 }

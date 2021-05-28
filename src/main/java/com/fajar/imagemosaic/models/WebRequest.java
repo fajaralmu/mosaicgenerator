@@ -10,14 +10,11 @@ import lombok.Data;
 
 @Data
 @JsonInclude(value = Include.NON_NULL)
-public class WebResponse implements Serializable{
+public class WebRequest implements Serializable{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8029263602345176048L;
-	private String message;
-	private String code = "00";
+	private static final long serialVersionUID = 8029883602345176048L;
 	private String imageData;
-	private Date date =new Date();
 }

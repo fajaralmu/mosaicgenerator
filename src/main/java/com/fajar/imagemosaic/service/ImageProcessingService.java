@@ -24,6 +24,8 @@ public class ImageProcessingService {
 	public WebResponse generateMosaic(WebRequest request) throws IOException {
 		Assert.notNull(request.getImageData(), "image data not present");
 		BufferedImage image = ImageUtil.readImageFromBase64String(request.getImageData());
+		Assert.notNull(image, "image data could not be extracted");
+		
 		BufferedImage resultImage = MosaicGenerator.generate(image, false);
 		String resultImageString = ImageUtil.imgToBase64String(resultImage, "png");
 		WebResponse response = new WebResponse();

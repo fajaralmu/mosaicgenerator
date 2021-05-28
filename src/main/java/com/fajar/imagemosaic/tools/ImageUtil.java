@@ -1,5 +1,7 @@
 package com.fajar.imagemosaic.tools;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
@@ -46,7 +48,15 @@ public class ImageUtil {
 		ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 		image = ImageIO.read(bis);
 		bis.close();
-		return image;
+		
+		BufferedImage output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = output.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		
+		return output;
 	}
 
 	public static BufferedImage getNearestImage(RgbColor rgb) {

@@ -34,7 +34,9 @@ public class MosaicGenerator {
 		g2.fillRect(0, 0, outputImage.getWidth(), outputImage.getHeight());
 		g.setColor(Color.white);
 		g.fillRect(0, 0, outputImage.getWidth(), outputImage.getHeight());
-		   
+		
+		System.out.println();
+		
 		int index = 0;
 		for (int width = 0; width < scaledImage.getWidth(); width++) {
 			for (int height = 0; height < scaledImage.getHeight(); height++, index++) {
@@ -45,9 +47,10 @@ public class MosaicGenerator {
 				g2.setColor(new Color(rgb.getRed().intValue(),rgb.getGreen().intValue(), rgb.getBlue().intValue(),255 ));
 				g2.fillRect(width*SIZE, height*SIZE, SIZE, SIZE);
 				
-				System.out.println("progres: "+(index+1)+"/"+rgbs.size());
+				System.out.print("*");
 			}
 		}
+		System.out.println();
 		g2.dispose();
 		g.dispose();
 		if (writeFile) {

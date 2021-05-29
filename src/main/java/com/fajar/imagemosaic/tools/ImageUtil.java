@@ -64,7 +64,7 @@ public class ImageUtil {
 	}
 
 	public static BufferedImage getNearestImage(RgbColor rgb) {
-		System.out.println("avgRgb: " + rgb);
+		
 		double gap = 255 * 3;
 		RgbColor selectedKey = null;
 		for (RgbColor key : randomImages.keySet()) {

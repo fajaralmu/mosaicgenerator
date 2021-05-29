@@ -16,20 +16,25 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.fajar.imagemosaic.config.ConfigLoader;
 import com.fajar.imagemosaic.models.RgbColor;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ImageUtil {
 
 	static Map<RgbColor, BufferedImage> randomImages = new HashMap<RgbColor, BufferedImage>();
 	static final String namedRandImagesPath = ConfigLoader.instance().getRandomImagePath();
  
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 //		System.out.println(ImageUtil);
+		setRandomImageMap();
+		System.out.println(randomImages.keySet().size());
+		
 	}
 	
 	public static BufferedImage readImageFromBase64String(String data) throws IOException {
@@ -86,10 +91,10 @@ public class ImageUtil {
 	    throw new UncheckedIOException(ioe);
 	  }
 	}
-	public static void setRandomImageMap(Resource directory) throws IOException  {
-		randomImages.clear();
-		File dir = directory.getFile();
-		for (File file : dir.listFiles()) {
+	public static void setRandomImageMap(File directory) throws IOException  {
+		randomImages.clear(); 
+		int loaded = 0;
+		for (File file : directory.listFiles()) {
 			
 			try {
 				 
@@ -100,13 +105,14 @@ public class ImageUtil {
 				String name = file.getName().replace("E-", "00").substring(0, file.getName().lastIndexOf("."));
 
 				randomImages.put(RgbColor.create(name), image);
-
+				loaded++;
 			} catch (IOException e) {
 				System.out.println("Error reading " + file.getName());
 				continue;
 			}
 
 		}
+		log.info("Loaded random images: {}", loaded);
 	}
 
 	public static void setRandomImageMap() throws IOException  {
@@ -116,28 +122,7 @@ public class ImageUtil {
 		randomImages.clear();
 
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-
-		// Ant-style path matching
-		Resource[] resources = resolver.getResources("/random_named/**");
-
-		for (Resource resource : resources) {
-			
-			try {
-				File file = resource.getFile();
-				BufferedImage image = ImageIO.read(file);
-				if (image == null) {
-					continue;
-				}
-				String name = file.getName().replace("E-", "00").substring(0, file.getName().lastIndexOf("."));
-
-				randomImages.put(RgbColor.create(name), image);
-
-			} catch (IOException e) {
-				System.out.println("Error reading " + resource.getFilename());
-				continue;
-			}
-
-		}
+		setRandomImageMap( new File(namedRandImagesPath));
 	}
 
 	public static void renameRandomImagesToRgbComponents() {

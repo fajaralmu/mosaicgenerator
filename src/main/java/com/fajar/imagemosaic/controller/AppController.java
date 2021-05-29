@@ -34,10 +34,11 @@ public class AppController {
 		
 		return new WebResponse();
 	}
-	@PostMapping(value="/generatemosaic", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public WebResponse generatemosaic(@RequestBody WebRequest request, HttpServletResponse httpServletResponse) throws IOException {
+	@PostMapping(value="/generatemosaic", consumes = MediaType.APPLICATION_JSON_VALUE)//, produces = MediaType.APPLICATION_JSON_VALUE)
+	public void generatemosaic(@RequestBody WebRequest request, HttpServletResponse httpServletResponse) throws IOException {
 		
-		return imageProcessingService.generateMosaic(request);
+//		return 
+				imageProcessingService.generateMosaic(request, httpServletResponse);
 	}
 	
 }

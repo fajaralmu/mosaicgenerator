@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -25,19 +27,30 @@ public class ImageProcessingService {
 	private Resource randomImageDirectory;
 	@PostConstruct
 	public void init() throws IOException {
-		ImageUtil.setRandomImageMap(randomImageDirectory);
+		ImageUtil.setRandomImageMap(randomImageDirectory.getFile());
 		log.info("randomImageDirectory: {}", randomImageDirectory);
 	}
 
-	public WebResponse generateMosaic(WebRequest request) throws IOException {
+	public void generateMosaic(WebRequest request, HttpServletResponse  httpServletResponse) throws IOException {
+		log.info("will generate mosaic");
+		
 		Assert.notNull(request.getImageData(), "image data not present");
 		BufferedImage image = ImageUtil.readImageFromBase64String(request.getImageData());
 		Assert.notNull(image, "image data could not be extracted");
 		
+		log.info("image input size: {} x {}", image.getWidth(), image.getHeight());
+		
 		BufferedImage resultImage = MosaicGenerator.generate(image, false);
-		String resultImageString = ImageUtil.imgToBase64String(resultImage, "png");
-		WebResponse response = new WebResponse();
-		response.setImageData("data:image/png;base64,"+resultImageString);
-		return response ;
+		
+		log.info("generated, preparing response");
+		
+		httpServletResponse.setContentType("image/png");
+		ImageIO.write(resultImage, "png", httpServletResponse.getOutputStream());
+		
+		
+//		String resultImageString = ImageUtil.imgToBase64String(resultImage, "png");
+//		WebResponse response = new WebResponse();
+//		response.setImageData("data:image/png;base64,"+resultImageString);
+//		return response ;
 	}
 }

@@ -18,6 +18,13 @@ public class MosaicGenerator {
 	
 	static final String OUTPUT_PATH  = ConfigLoader.instance().getOutputPath();
 	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize(); 
+	
+	public static void main(String[] args) throws IOException {
+		String pathname = "D:\\Archieve\\Pictures\\RandomImages\\1-window-preferences.png";
+		BufferedImage image = ImageIO.read(new File(pathname ));
+		generate(image, true);
+	}
+	
 	public static BufferedImage generate(BufferedImage image, boolean writeFile) throws IOException {
 		ImageUtil.setRandomImageMap();
 		BufferedImage scaledImage = Modifier.scale(image, SIZE);
@@ -47,6 +54,9 @@ public class MosaicGenerator {
 				g2.setColor(new Color(rgb.getRed().intValue(),rgb.getGreen().intValue(), rgb.getBlue().intValue(),255 ));
 				g2.fillRect(width*SIZE, height*SIZE, SIZE, SIZE);
 				
+				if (index % 40 == 0) {
+					System.out.println();
+				}
 				System.out.print("*");
 			}
 		}

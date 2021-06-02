@@ -22,22 +22,29 @@ public class Modifier {
 		Double outputW = w, outputH = h;
 		double scaleFactor = 1.0d;
 		if (w > h) {
-			if (h < minSize) {
-				scaleFactor = h / minSize; 
-			} else {
+			//width > height
+			if (h > minSize) {
 				scaleFactor = minSize/h;
-			}
+				outputW = w * scaleFactor;
+			}else {
+				scaleFactor = h / minSize; 
+				outputW = w / scaleFactor;
+			} 
 			outputH = minSize.doubleValue();
-			outputW = w * scaleFactor;
+			
 		} else {
+			//height > width
 			if (w < minSize) {
 				scaleFactor = w / minSize; 
+				outputH = h / scaleFactor;
 			} else {
-				scaleFactor =minSize/w; 
+				scaleFactor =minSize/w;
+				outputH = h * scaleFactor;
 			}
 			outputW = minSize.doubleValue();
-			outputH = h * scaleFactor;
+			
 		}
+		System.out.println("scaleFactor: "+scaleFactor);
 		return scale(input, outputW.intValue(), outputH.intValue());
 	}
 

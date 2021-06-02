@@ -52,8 +52,9 @@ public class ImageProcessingService {
 		BufferedImage resultImage = MosaicGenerator.generate(image, false, new MosaicProcessNotifier() {
 			
 			@Override
-			public void notify(int step, int totalStep) {
-				progressService.sendProgress(step, totalStep, 80, httpServletRequest);
+			public void notify(Double step, Double totalStep) {
+//				log.info("progress: {} of {} = {}", step, totalStep, step/totalStep);
+				progressService.sendProgress(1, totalStep, 80, httpServletRequest);
 			}
 		});
 		

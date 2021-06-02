@@ -5,17 +5,19 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.fajar.imagemosaic.models.WebRequest;
-import com.fajar.imagemosaic.models.WebResponse;
 import com.fajar.imagemosaic.tools.ImageUtil;
 import com.fajar.imagemosaic.tools.MosaicGenerator;
+import com.fajar.imagemosaic.tools.MosaicProcessNotifier;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,13 +27,18 @@ public class ImageProcessingService {
 
 	@Value("resources/random_named/")
 	private Resource randomImageDirectory;
+	
+	@Autowired
+	private ProgressService progressService;
+	
 	@PostConstruct
 	public void init() throws IOException {
 		ImageUtil.setRandomImageMap(randomImageDirectory.getFile());
 		log.info("randomImageDirectory: {}", randomImageDirectory);
 	}
 
-	public void generateMosaic(WebRequest request, HttpServletResponse  httpServletResponse) throws IOException {
+	public void generateMosaic(WebRequest request, HttpServletRequest httpServletRequest, HttpServletResponse  httpServletResponse) throws IOException {
+		progressService.init(httpServletRequest.getHeader("requestid"));
 		log.info("will generate mosaic");
 		
 		Assert.notNull(request.getImageData(), "image data not present");
@@ -40,13 +47,22 @@ public class ImageProcessingService {
 		
 		log.info("image input size: {} x {}", image.getWidth(), image.getHeight());
 		
-		BufferedImage resultImage = MosaicGenerator.generate(image, false);
+		progressService.sendProgress(10, httpServletRequest);
+		
+		BufferedImage resultImage = MosaicGenerator.generate(image, false, new MosaicProcessNotifier() {
+			
+			@Override
+			public void notify(int step, int totalStep) {
+				progressService.sendProgress(step, totalStep, 80, httpServletRequest);
+			}
+		});
 		
 		log.info("generated, preparing response");
 		
 		httpServletResponse.setContentType("image/png");
 		ImageIO.write(resultImage, "png", httpServletResponse.getOutputStream());
 		
+		progressService.sendComplete(httpServletRequest);
 		
 //		String resultImageString = ImageUtil.imgToBase64String(resultImage, "png");
 //		WebResponse response = new WebResponse();

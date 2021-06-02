@@ -20,12 +20,12 @@ public class MosaicGenerator {
 	static final Integer SIZE = ConfigLoader.instance().getInputScaleSize(); 
 	
 	public static void main(String[] args) throws IOException {
-		String pathname = "D:\\Archieve\\Pictures\\RandomImages\\1-window-preferences.png";
+		String pathname = "D:\\Archieve\\Pictures\\RandomImages\\arucocalibration.png";
 		BufferedImage image = ImageIO.read(new File(pathname ));
-		generate(image, true);
+		generate(image, true, null);
 	}
 	
-	public static BufferedImage generate(BufferedImage image, boolean writeFile) throws IOException {
+	public static BufferedImage generate(BufferedImage image, boolean writeFile, MosaicProcessNotifier notifier) throws IOException {
 		ImageUtil.setRandomImageMap();
 		BufferedImage scaledImage = Modifier.scale(image, SIZE);
 		 
@@ -44,6 +44,8 @@ public class MosaicGenerator {
 		
 		System.out.println();
 		
+		int steps = 1;
+		
 		int index = 0;
 		for (int width = 0; width < scaledImage.getWidth(); width++) {
 			for (int height = 0; height < scaledImage.getHeight(); height++, index++) {
@@ -55,6 +57,10 @@ public class MosaicGenerator {
 				g2.fillRect(width*SIZE, height*SIZE, SIZE, SIZE);
 				
 				if (index % 40 == 0) {
+					if (notifier!=null) {
+						notifier.notify(steps, rgbs.size()/40);
+						steps++;
+					}
 					System.out.println();
 				}
 				System.out.print("*");

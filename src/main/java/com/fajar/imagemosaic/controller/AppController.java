@@ -2,6 +2,7 @@ package com.fajar.imagemosaic.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,10 @@ public class AppController {
 		return new WebResponse();
 	}
 	@PostMapping(value="/generatemosaic", consumes = MediaType.APPLICATION_JSON_VALUE)//, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void generatemosaic(@RequestBody WebRequest request, HttpServletResponse httpServletResponse) throws IOException {
+	public void generatemosaic(@RequestBody WebRequest request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		
 //		return 
-				imageProcessingService.generateMosaic(request, httpServletResponse);
+				imageProcessingService.generateMosaic(request, httpServletRequest, httpServletResponse);
 	}
 	
 }

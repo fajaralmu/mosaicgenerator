@@ -17,7 +17,7 @@ public class App
 	static final String INPUT_PATH = ConfigLoader.instance().getInputPath();
     public static void main( String[] args ) throws IOException
     {
-        MosaicGenerator.generate(ImageIO.read(new File(INPUT_PATH+"sample.jpg")), true);
+        MosaicGenerator.generate(ImageIO.read(new File(INPUT_PATH+"sample.jpg")), true, null);
         
     }
 }

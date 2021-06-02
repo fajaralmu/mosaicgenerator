@@ -11,7 +11,8 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 		return super.preHandle(request, response, handler);
 	}
 	@Override
